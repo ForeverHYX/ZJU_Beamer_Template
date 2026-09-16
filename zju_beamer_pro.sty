@@ -25,24 +25,26 @@
 % ------------------------------------------------------------
 % 1. 宏包
 % ------------------------------------------------------------
+% 说明：如需统计图表，请在 main.tex 导言区自行加载
+%       \usepackage{pgfplots}\pgfplotsset{compat=1.18}
+%       （模板默认不加载，以缩短 Overleaf 编译时间）
 \usefonttheme[onlymath]{serif}                 % 数学公式衬线
 \RequirePackage{fontspec}
 \RequirePackage{xeCJK}
+\PassOptionsToPackage{fontset=none}{ctex}      % 跳过 ctex 系统字体探测（加快加载）
 \RequirePackage{ctex}
 
 \RequirePackage{amsmath,amsfonts,amssymb,bm}
 \RequirePackage{graphicx}
 \RequirePackage{booktabs}
 \RequirePackage{multicol}
-\RequirePackage{metalogo}
 \RequirePackage{listings}
 \RequirePackage{xcolor}
 \RequirePackage{etoolbox}
 \RequirePackage{tikz}
-\usetikzlibrary{calc,positioning,arrows.meta,shadows.blur,fadings}
-\RequirePackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\RequirePackage[most]{tcolorbox}
+\usetikzlibrary{calc,positioning,arrows.meta}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins,breakable,hooks,listings}
 \RequirePackage{fontawesome5}
 \RequirePackage{hyperref,url}
 
@@ -59,14 +61,14 @@
     BoldItalicFont=FiraSans-BoldItalic.otf]%
 }{}
 
-\newcommand{\zju@wenkaiopts}{BoldFont=LXGWWenKai-Medium}
+% 文楷单字重 + AutoFakeBold（省一次大字体文件加载）
 \IfFileExists{fonts/LXGWWenKai-Regular.ttf}{%
-  \setCJKsansfont{LXGWWenKai-Regular}[Path=fonts/,Extension=.ttf,\zju@wenkaiopts]%
-  \setCJKmainfont{LXGWWenKai-Regular}[Path=fonts/,Extension=.ttf,\zju@wenkaiopts]%
+  \setCJKsansfont{LXGWWenKai-Regular}[Path=fonts/,Extension=.ttf,AutoFakeBold=2.8]%
+  \setCJKmainfont{LXGWWenKai-Regular}[Path=fonts/,Extension=.ttf,AutoFakeBold=2.8]%
 }{%
   \IfFontExistsTF{LXGW WenKai}{%
-    \setCJKsansfont{LXGW WenKai}%
-    \setCJKmainfont{LXGW WenKai}%
+    \setCJKsansfont{LXGW WenKai}[AutoFakeBold=2.8]%
+    \setCJKmainfont{LXGW WenKai}[AutoFakeBold=2.8]%
   }{%
     \IfFontExistsTF{PingFang SC}{%
       \setCJKsansfont{PingFang SC}%
