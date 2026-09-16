@@ -16,6 +16,7 @@
 \author{张三\\[1mm]{\footnotesize 计算机科学与技术专业}}
 \institute{浙江大学计算机科学与技术学院}
 \date{\today}
+\renewcommand{\zjuthanksinfo}{张三 · 浙江大学计算机科学与技术学院 · \today}
 
 \begin{document}
 
@@ -43,42 +44,39 @@
 \section{快速上手}
 
 \begin{frame}[fragile]{快速上手}{QUICK START}
-  \begin{minipage}[t]{0.48\textwidth}
+  \begin{minipage}[t]{0.475\textwidth}
     \vspace{0pt}%
     \begin{zjubox}{blue}{环境依赖}
       {\footnotesize
       \begin{denseitem}
         \item TeX Live 2023+（Overleaf 亦可）
-        \item 编译器：\textbf{XeLaTeX}
+        \item 编译器：\textbf{XeLaTeX}，编译两遍
         \item 字体已随 \texttt{fonts/} 分发，无需安装
-        \item 西文 Fira Sans 来自 TeX Live 的 \texttt{fira} 宏包
       \end{denseitem}}
     \end{zjubox}
-    \begin{zjubox}{gray}{Overleaf 使用}
-      {\footnotesize 新建项目 $\rightarrow$ 上传 Release 中的模板压缩包
-      $\rightarrow$ 菜单中将编译器切换为 \textbf{XeLaTeX}
-      $\rightarrow$ 重新编译两次。}
+    \begin{zjubox}{orange}{在哪里改内容}
+      {\footnotesize 所有正文都在 \texttt{main.tex}；
+      封面信息在开头的 \texttt{\string\title} 等命令中。}
     \end{zjubox}
   \end{minipage}\hfill
-  \begin{minipage}[t]{0.48\textwidth}
+  \begin{minipage}[t]{0.475\textwidth}
     \vspace{0pt}%
-    \begin{zjubox}{green}{Overleaf 之外}
-      {\footnotesize 也可以在 Overleaf 新建空白项目后上传整个仓库，
-      菜单中把编译器切换为 \textbf{XeLaTeX} 后编译两次。}
+    \begin{zjubox}{green}{Overleaf}
+      {\footnotesize 上传 Release 中的模板压缩包
+      $\rightarrow$ 编译器切换为 \textbf{XeLaTeX}
+      $\rightarrow$ 编译两次。}
     \end{zjubox}
-    \begin{zjubox}{orange}{在哪里改内容}
-      {\footnotesize 所有正文都在 \texttt{main.tex}：
-      封面信息在文件开头的 \texttt{\string\title} 等命令中，
-      正文按 section 组织，组件用法见本演示各页源码。}
+    \begin{zjubox}{gray}{自动生成}
+      {\footnotesize 封面、章节过渡页、致谢页均由模板
+      自动生成，无需手写。}
     \end{zjubox}
   \end{minipage}
-  \vspace{0.6mm}
+  \vspace{0.8mm}
   \begin{zjucode}{bash}{本地编译（编译两遍）}
-latexmk -xelatex main.tex
 latexmk -xelatex main.tex
   \end{zjucode}
   \begin{takeaway}
-    封面、章节过渡页、致谢页由模板自动生成，只需填好首页信息即可。
+    封面、章节过渡页、致谢页由模板自动生成，只需填好首页信息。
   \end{takeaway}
 \end{frame}
 
