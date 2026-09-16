@@ -34,7 +34,7 @@ screenshots/          README 截图
 ## 致谢
 
 - [qychen2001/ZJU-Beamer-Template](https://github.com/qychen2001/ZJU-Beamer-Template) —— 上游项目，文档框架与校徽校名素材来源
-- [TonyCrane 的系统课 slides](https://slides.tonycrane.cc/) —— 版式层级与字体搭配参考
+- [TonyCrane 的 slides](https://slides.tonycrane.cc/) —— 版式层级与字体搭配参考
 - [SimplePlus Beamer Theme](https://github.com/pm25/SimplePlus-BeamerTheme) —— 页眉横线与 block 风格参考
 - [得意黑 Smiley Sans](https://github.com/atelier-anchor/smiley-sans) · [霞鹜文楷 LXGW WenKai](https://github.com/lxgw/LxgwWenKai)（SIL OFL，随 `fonts/` 分发）
 
