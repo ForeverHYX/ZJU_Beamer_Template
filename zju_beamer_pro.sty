@@ -1,0 +1,476 @@
+% ============================================================
+%  zju_beamer_pro.sty —— 浙江大学 Beamer 高信息密度主题 v2
+%  （SimplePlus 风格横线版）
+% ------------------------------------------------------------
+%  基于 qychen2001/ZJU-Beamer-Template（光头哥 / PhilFan）重构
+%  版权沿用上游：LPPL 1.3c 或 GPL 3.0 双许可
+%
+%  v2 设计（对标 SimplePlus Beamer Theme 的克制风格）：
+%    * 标题区：蓝色标题 + 求是蓝→深蓝渐变细横线（替代渐变横幅）
+%    * 浙大校名 + 校徽渐变填充，置于横线右上方
+%    * 无底部色块，仅右下角小页码；背景保留浙大校徽水印
+%    * 全部彩色组件收敛为蓝色系阶梯（求是蓝/蔚蓝/天蓝/靛蓝/蓝灰），
+%      block 采用 SimplePlus 式「色块标题条 + 嫩色浅底」
+%    * 中文得意黑（Smiley Sans，随 fonts/ 分发），西文 Latin Modern Sans
+%    * 组件：zjubox / takeaway / statcard / awardcard / zjutimeline /
+%      imgcard / badge / denseitem
+%
+%  使用：\documentclass[10pt,aspectratio=169]{beamer}
+%        \usepackage{zju_beamer_pro}
+%  编译：latexmk -xelatex main.tex
+% ============================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zju_beamer_pro}[2026/09/16 v2.0 ZJU Beamer Pro (SimplePlus line style)]
+
+% ------------------------------------------------------------
+% 1. 宏包
+% ------------------------------------------------------------
+\usefonttheme[onlymath]{serif}                 % 数学公式衬线
+\RequirePackage{fontspec}
+\RequirePackage{xeCJK}
+\RequirePackage{ctex}
+
+\RequirePackage{amsmath,amsfonts,amssymb,bm}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage{multicol}
+\RequirePackage{metalogo}
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+\RequirePackage{etoolbox}
+\RequirePackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,shadows.blur,fadings}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{fontawesome5}
+\RequirePackage{hyperref,url}
+
+% ------------------------------------------------------------
+% 2. 字体（参考 slides.tonycrane.cc/data-sec-pre 的字体层级）
+%    大标题：得意黑 Smiley Sans + 西文 Fira Italic（\zjutitlefont）
+%    二级标题：文楷加粗（正体）；正文：霞鹜文楷 LXGW WenKai（手写楷体感）
+%    文楷/得意黑随 fonts/ 目录分发；无 fira 环境回退 LM Sans
+% ------------------------------------------------------------
+\IfFileExists{FiraSans-Regular.otf}{%
+  \setsansfont{FiraSans-Regular.otf}[%
+    BoldFont=FiraSans-Bold.otf,%
+    ItalicFont=FiraSans-Italic.otf,%
+    BoldItalicFont=FiraSans-BoldItalic.otf]%
+}{}
+
+\newcommand{\zju@wenkaiopts}{BoldFont=LXGWWenKai-Medium}
+\IfFileExists{fonts/LXGWWenKai-Regular.ttf}{%
+  \setCJKsansfont{LXGWWenKai-Regular}[Path=fonts/,Extension=.ttf,\zju@wenkaiopts]%
+  \setCJKmainfont{LXGWWenKai-Regular}[Path=fonts/,Extension=.ttf,\zju@wenkaiopts]%
+}{%
+  \IfFontExistsTF{LXGW WenKai}{%
+    \setCJKsansfont{LXGW WenKai}%
+    \setCJKmainfont{LXGW WenKai}%
+  }{%
+    \IfFontExistsTF{PingFang SC}{%
+      \setCJKsansfont{PingFang SC}%
+      \setCJKmainfont{PingFang SC}%
+    }{}%
+  }%
+}
+
+% 中文大标题族：得意黑；西文随 \itshape 切 Fira Italic
+\IfFileExists{fonts/SmileySans-Oblique.ttf}{%
+  \setCJKfamilyfont{zjusk}{SmileySans-Oblique}[Path=fonts/,Extension=.ttf,AutoFakeBold=2.6]%
+}{%
+  \IfFontExistsTF{Smiley Sans}{%
+    \setCJKfamilyfont{zjusk}{Smiley Sans}[AutoFakeBold=2.6]%
+  }{%
+    \IfFontExistsTF{LXGW WenKai}{%
+      \setCJKfamilyfont{zjusk}{LXGW WenKai}%
+    }{}%
+  }%
+}
+% 标题包装：frametitle / 封面标题 / 章节标题 / takeaway 内使用
+\newcommand{\zjutitlefont}{\CJKfamily{zjusk}\itshape}
+
+% 圈号、罗马数字等符号走中文字体（避免西文字体缺字形）
+\xeCJKDeclareCharClass{CJK}{"2460 -> "24FF}
+\xeCJKDeclareCharClass{CJK}{"2160 -> "217F}
+
+% ------------------------------------------------------------
+% 3. 配色：全蓝色系阶梯（SimplePlus 式嫩色调）
+%    主阶：求是蓝 zjublue → 深蓝 zjubluedark（横线与渐变专用）
+%    组件阶：azure / sky / indigo / steel，正文底色一律嫩蓝浅色
+% ------------------------------------------------------------
+\definecolor{zjublue}{RGB}{0,63,136}        % 求是蓝（主色）
+\definecolor{zjubluedark}{RGB}{0,40,88}     % 深蓝（渐变末端）
+\definecolor{zjubluelight}{RGB}{0,110,182}  % 蔚蓝（次级）
+\definecolor{zjusky}{RGB}{64,150,218}       % 天蓝（嫩）
+\definecolor{zjuindigo}{RGB}{30,42,105}     % 靛蓝（强调/警示）
+\definecolor{zjusteel}{RGB}{96,114,140}     % 蓝灰（中性）
+\definecolor{zjuice}{RGB}{236,243,250}      % 冰蓝（浅底）
+
+% 语义色名沿用旧 API，但全部映射到蓝色阶梯（block 一律为蓝）
+\colorlet{zjuorange}{zjubluelight}%
+\colorlet{zjugreen}{zjusky}%
+\colorlet{zjupurple}{zjuindigo}%
+\colorlet{zjured}{zjuindigo}%
+\colorlet{zjugold}{zjusky}%
+\colorlet{zjugray}{zjusteel}%
+\colorlet{zjuteal}{zjubluelight}%
+% 奖牌层级（awardcard）：金/银/铜 → 深/中/浅蓝阶
+\colorlet{zjusilver}{zjusteel}%
+\colorlet{zjubronze}{zjubluelight}%
+
+\hypersetup{urlcolor=zjublue, linkcolor=zjublue, citecolor=zjublue}
+
+% ------------------------------------------------------------
+% 4. 版面：16:9，去导航与页眉，背景保留浙大校徽水印
+% ------------------------------------------------------------
+\setbeamersize{text margin left=0.55cm, text margin right=0.55cm}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+
+\setbeamertemplate{background}{}
+
+% 列表符号
+\setbeamertemplate{itemize item}{\scriptsize\raise1.4pt\hbox{\textcolor{zjublue}{\ensuremath{\blacktriangleright}}}}
+\setbeamertemplate{itemize subitem}{\scriptsize\raise1.2pt\hbox{\textcolor{zjublue!55}{\ensuremath{\bullet}}}}
+\setbeamertemplate{itemize subsubitem}{\scriptsize\raise0.9pt\hbox{\textcolor{black!45}{\ensuremath{\textendash}}}}
+\setbeamertemplate{enumerate item}{\textcolor{zjublue}{\textbf{\insertenumlabel.}}}
+\setbeamertemplate{enumerate subitem}{\textcolor{zjublue!70}{\insertenumlabel.\insertsubenumlabel.}}
+\setlength{\leftmargini}{1.35em}
+\setlength{\leftmarginii}{1.2em}
+
+% 紧凑列表环境
+\newenvironment{denseitem}{%
+  \begin{itemize}\setlength{\itemsep}{0.08em}\setlength{\parskip}{0pt}\setlength{\topsep}{0.1em}}{\end{itemize}}
+\newenvironment{denseenum}{%
+  \begin{enumerate}\setlength{\itemsep}{0.15em}\setlength{\parskip}{0pt}\setlength{\topsep}{0.2em}}{\end{enumerate}}
+
+% ------------------------------------------------------------
+% 5. beamer 原生 block：SimplePlus 式（色块标题条 + 嫩蓝浅底，无阴影）
+% ------------------------------------------------------------
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\setbeamercolor{block title}{fg=white,bg=zjublue}
+\setbeamercolor{block body}{fg=black!88,bg=zjublue!5}
+\setbeamercolor{block title alerted}{fg=white,bg=zjubluelight}
+\setbeamercolor{block body alerted}{fg=black!88,bg=zjubluelight!6}
+\setbeamercolor{block title example}{fg=white,bg=zjusky}
+\setbeamercolor{block body example}{fg=black!88,bg=zjusky!7}
+
+% ------------------------------------------------------------
+% 6. 标题区：SimplePlus 式横线
+%    上行：蓝色粗标题（+ 副标题小字）……右侧渐变校名+校徽
+%    下行：求是蓝 → 深蓝渐变细线
+% ------------------------------------------------------------
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamercolor{frametitle}{fg=zjublue}
+
+% —— 右上角校名：浙江大学渐变版（figures/char_grad.png 由 char.pdf 上色生成，透明底无框）——
+\newcommand{\zjubrandmark}{\includegraphics[height=0.44cm]{figures/char_grad.png}}
+
+% —— 渐变横线（宽度 = 正文宽度，在 \begin{document} 时定宽）——
+\AtBeginDocument{%
+  \pgfdeclarehorizontalshading{zju@titlerule}{0.65mm}{%
+    color(0pt)=(zjublue); color(\textwidth)=(zjubluedark)}%
+}
+
+\defbeamertemplate*{frametitle}{zjupro}{%
+  \nointerlineskip
+  \vskip0.42em
+  \hbox to\textwidth{%
+    {\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\zjutitlefont
+     \insertframetitle
+     \ifx\insertframesubtitle\@empty\else
+       \;\;{\footnotesize\mdseries\color{black!45}\insertframesubtitle}%
+     \fi}%
+    \hfill
+    \raisebox{1.6pt}{\zjubrandmark}%
+  }\par
+  \nointerlineskip
+  \vskip2.6pt
+  \pgfuseshading{zju@titlerule}\par
+  \nointerlineskip
+  \vskip1.1mm
+}
+
+% ------------------------------------------------------------
+% 7. 页脚：无页码
+% ------------------------------------------------------------
+\setbeamertemplate{footline}{}
+
+% ------------------------------------------------------------
+% 8. 全出血通用命令 + 封面（白底 · 参考风格：左上校徽校名，大字标题垫浅蓝色带，
+%    右侧浅色芯片几何装饰；与内容页画风统一）
+% ------------------------------------------------------------
+\newcommand{\zjufullbleed}[1]{%
+  \nointerlineskip
+  \hbox{\leavevmode\hskip-\Gm@lmargin#1\hskip-\Gm@rmargin}}
+
+% 芯片 die 几何装饰（浅色，用于白底大页面）
+\newcommand{\zju@chiptec}[2]{%
+  \begin{scope}[shift={#1},rotate=45]
+    \fill[black!5]   (-2.7,-2.7) rectangle (2.7,2.7);
+    \fill[black!9]   (-1.95,-1.95) rectangle (1.95,1.95);
+    \fill[zjublue!9] (-1.25,-1.25) rectangle (1.25,1.25);
+    \fill[zjublue!15](-0.6,-0.6) rectangle (0.6,0.6);
+    \foreach \i in {-2.35,-1.55,0.75,1.55,2.35}
+      \fill[black!14] (\i-0.11,2.7) rectangle (\i+0.11,3.15);
+  \end{scope}}
+
+\defbeamertemplate*{title page}{zjupro}{%
+  \zjufullbleed{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
+    \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
+    % —— 右侧芯片几何装饰 ——
+    \zju@chiptec{(\paperwidth+0.9cm,-3.1cm)}{}
+    % —— 左上校徽 + 校名（本蓝）——
+    \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
+      {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
+    \node[overlay,anchor=north west,inner sep=0pt] at (1.07cm,-2.6cm)
+      {\includegraphics[height=0.5cm]{figures/char_blue.png}};
+    % —— 标题 + 浅蓝色带 ——
+    \fill[zjublue!12] (1.0cm,-4.5cm) rectangle (\paperwidth-1.0cm,-5.6cm);
+    \node[overlay,anchor=west,text=zjublue,font=\zjutitlefont\fontsize{22.5}{27}\selectfont\bfseries,
+          text width=0.72\paperwidth] at (1.3cm,-5.05cm)
+      {\inserttitle};
+    % —— 副标题 / 汇报人 ——
+    \node[overlay,anchor=west,text=black!82,font=\large\bfseries] at (1.05cm,-6.35cm)
+      {\insertsubtitle};
+    \node[overlay,anchor=west,text=black!88,font=\normalsize\bfseries,align=left] at (1.05cm,-7.15cm)
+      {\insertauthor};
+    \node[overlay,anchor=west,text=black!55,font=\footnotesize] at (1.05cm,-7.75cm)
+      {\insertinstitute};
+    % —— 日期（右下）——
+    \node[overlay,anchor=east,text=black!45,font=\footnotesize] at (\paperwidth-1.0cm,-8.3cm)
+      {\insertdate};
+  \end{tikzpicture}}%
+}
+
+% ------------------------------------------------------------
+% 9. 章节过渡页（\AtBeginSection 自动插入；白底水印 + 大字标题垫浅蓝色带）
+% ------------------------------------------------------------
+\newif\ifzjusectionpages \zjusectionpagestrue
+\newcommand{\nosectionpages}{\zjusectionpagesfalse}
+\newcommand{\zjusectionpage}{%
+  \zjufullbleed{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
+    \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
+    % 左上角校徽 + 校名（与封面一致）
+    \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
+      {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
+    \node[overlay,anchor=north west,inner sep=0pt] at (1.07cm,-2.6cm)
+      {\includegraphics[height=0.5cm]{figures/char_blue.png}};
+    % 右下角淡色芯片装饰 + 巨大幽灵章节号
+    \zju@chiptec{(\paperwidth+1.1cm,-\paperheight+0.4cm)}{}
+    \node[overlay,anchor=east,text=zjublue!10,
+          font=\zjutitlefont\fontsize{110}{110}\selectfont\bfseries]
+      at (\paperwidth-0.7cm,-2.6cm) {\insertsectionnumber};
+    % 小标签
+    \node[overlay,anchor=west,text=zjublue!80,font=\small\bfseries]
+      at (1.1cm,-3.55cm) {第 \insertsectionnumber\ 部分\; · \; PART \insertsectionnumber};
+    \fill[zjublue] (1.12cm,-3.95cm) rectangle (3.55cm,-4.02cm);
+    % 标题垫浅蓝色带
+    \fill[zjublue!12] (1.05cm,-4.45cm) rectangle (\paperwidth-1.0cm,-5.65cm);
+    \node[overlay,anchor=west,text=black!88,font=\zjutitlefont\fontsize{23}{27}\selectfont\bfseries,
+          text width=0.74\paperwidth] at (1.35cm,-5.05cm)
+      {\insertsection};
+  \end{tikzpicture}}%
+}
+\AtBeginSection[]{%
+  \ifzjusectionpages
+    {\begin{frame}[plain]\zjusectionpage\end{frame}}%
+  \fi
+}
+
+% ------------------------------------------------------------
+% 9b. 致谢页（白底，与封面/章节页同风格；\begin{frame}[plain]\zjuthanks\end{frame}）
+% ------------------------------------------------------------
+\newcommand{\zjuthanks}{%
+  \zjufullbleed{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
+    \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
+    \zju@chiptec{(\paperwidth+0.9cm,-3.4cm)}{}
+    % 左上校徽 + 校名
+    \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
+      {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
+    \node[overlay,anchor=north west,inner sep=0pt] at (1.07cm,-2.6cm)
+      {\includegraphics[height=0.5cm]{figures/char_blue.png}};
+    % 大字致谢 + 浅蓝色带
+    \fill[zjublue!12] (1.0cm,-4.3cm) rectangle (\paperwidth-1.0cm,-5.5cm);
+    \node[overlay,anchor=west,text=zjublue,font=\zjutitlefont\fontsize{26}{30}\selectfont\bfseries]
+      at (1.3cm,-4.9cm) {恳请各位老师批评指正};
+    \node[overlay,anchor=west,text=black!82,font=\large\bfseries] at (1.05cm,-6.35cm)
+      {谢谢！};
+    \node[overlay,anchor=west,text=black!55,font=\footnotesize] at (1.05cm,-7.0cm)
+      {洪奕迅 · 信息安全专业 2023 级 · 2026 年 9 月};
+  \end{tikzpicture}}%
+}
+
+% ------------------------------------------------------------
+% 10. 目录样式：数字色块 + 当前章节高亮
+% ------------------------------------------------------------
+\setbeamercolor{section in toc}{fg=black!80}
+\setbeamerfont{section in toc}{size=\large,series=\bfseries}
+\setbeamertemplate{section in toc}{%
+  \tikz[baseline=-0.7ex]\node[fill=zjublue!18,text=zjublue,font=\footnotesize\bfseries,
+    rounded corners=1.5pt,inner sep=2.4pt,minimum width=1.55em,align=center]
+    {\inserttocsectionnumber};\hspace{0.65em}\inserttocsection\par}
+\setbeamercolor{section in toc current}{fg=zjublue}
+\setbeamerfont{section in toc current}{size=\large,series=\bfseries}
+\setbeamertemplate{section in toc current}{%
+  \tikz[baseline=-0.7ex]\node[fill=zjublue,text=white,font=\footnotesize\bfseries,
+    rounded corners=1.5pt,inner sep=2.4pt,minimum width=1.55em,align=center]
+    {\inserttocsectionnumber};\hspace{0.65em}\inserttocsection\par}
+\setbeamertemplate{subsection in toc}{%
+  \hspace{1.9em}{\textcolor{zjublue!55}{\scriptsize$\circ$}}\hspace{0.5em}\inserttocsubsection\par}
+
+% ------------------------------------------------------------
+% 11. 组件：zjubox（SimplePlus 式：色块标题条 + 嫩蓝浅底，无边框）
+%     \begin{zjubox}{blue|orange|green|purple|red|gold|gray}{标题}
+%     （色键已全部映射到蓝色阶梯）
+% ------------------------------------------------------------
+\newtcolorbox{zjubox}[3][]{%
+  enhanced,
+  code={\colorlet{zju@c}{zju#2}},
+  colframe=zju@c, colback=zju@c!5,
+  colbacktitle=zju@c, coltitle=white,
+  fonttitle=\bfseries\small,
+  title={#3},
+  boxrule=0pt, arc=2mm, left=2.4mm, right=2.4mm, top=1.0mm, bottom=1.2mm,
+  toptitle=0.7mm, bottomtitle=0.7mm,
+  #1}
+
+% ------------------------------------------------------------
+% 12. 组件：takeaway 全宽渐变要点条（求是蓝渐变 + 天蓝侧标）
+% ------------------------------------------------------------
+% 深蓝底条内的高亮色（takeaway 内部把 \hl/\hlo 局部切换到此定义）
+\newcommand{\zju@tkhl}[1]{\textcolor{white!45!zjusky}{\textbf{#1}}}
+\newtcolorbox{takeaway}{%
+  enhanced,
+  interior style={left color=zjublue, right color=zjubluedark!92!black},
+  colupper=white, fontupper={\zjutitlefont\bfseries\small},
+  boxrule=0pt, arc=1.4mm, left=3.2mm, right=3.2mm, top=1.2mm, bottom=1.2mm,
+  before skip=1.6mm, after skip=0.6mm,
+  borderline west={3pt}{0pt}{zjusky},
+  before upper={\textcolor{white!85!zjublue}{\faIcon{bolt}}\hspace{1.8mm}%
+    \let\hl\zju@tkhl\let\hlo\zju@tkhl}}
+
+% ------------------------------------------------------------
+% 13. 组件：statcard 数据卡片（tikz 水平盒，可 \hfill 并排；SimplePlus 式嫩蓝浅底）
+% ------------------------------------------------------------
+\newdimen\zjustatwidth \zjustatwidth=3.3cm
+\NewDocumentCommand{\statcard}{O{blue} m m}{%
+  \begin{tikzpicture}[baseline=(card.base)]
+    \node[draw=zju#1!30, fill=zju#1!6, rounded corners=1.6mm,
+          inner xsep=1.2mm, inner ysep=1.6mm,
+          minimum width=\zjustatwidth,
+          text width=\dimexpr\zjustatwidth-2.4mm\relax, align=center] (card)
+      {{\color{zju#1!80!black}\fontsize{13.5}{15}\selectfont\bfseries #2}\\[0.5mm]
+       {\scriptsize\color{black!58}#3}};
+  \end{tikzpicture}}
+
+% ------------------------------------------------------------
+% 14. 组件：badge 徽章 / hl 高亮 / ic 图标
+% ------------------------------------------------------------
+\NewDocumentCommand{\badge}{O{zjublue} m}{%
+  \tikz[baseline=-0.65ex]\node[fill=#1, text=white, font=\scriptsize\bfseries,
+    rounded corners=1.5pt, inner xsep=4.5pt, inner ysep=2.2pt]{#2};}
+\newcommand{\hl}[1]{\textcolor{zjublue}{\textbf{#1}}}
+\newcommand{\hlo}[1]{\textcolor{zjuindigo}{\textbf{#1}}}
+\NewDocumentCommand{\ic}{O{zjublue} m}{\textcolor{#1}{\faIcon{#2}}}
+
+% ------------------------------------------------------------
+% 15. 组件：awardcard 奖项卡片（蓝阶侧条，可排 2×2 网格）
+% ------------------------------------------------------------
+\newdimen\zjuawardwidth \zjuawardwidth=7.15cm
+\NewDocumentCommand{\awardcard}{O{gold} m m m m}{%
+  \begin{tikzpicture}[baseline=(card.base)]
+    \node[draw=zju#1!35, fill=white, rounded corners=1.6mm,
+          inner xsep=2mm, inner ysep=1.4mm,
+          text width=\dimexpr\zjuawardwidth-6.4mm\relax, align=left] (card)
+      {\begin{tikzpicture}[baseline=-2.6ex]
+         \node[circle, fill=zju#1!10, text=zju#1!80!black, minimum size=0.78cm, inner sep=0pt]
+           {\faIcon{#2}};
+       \end{tikzpicture}\hspace{1.4mm}%
+       \badge[zju#1]{#3}\hspace{1.2mm}{\small\bfseries #4}\\[0.7mm]
+       {\footnotesize\color{black!60}#5}};
+    \fill[zju#1, rounded corners=0.9mm]
+      ($(card.south west)+(0.55mm,1.0mm)$) rectangle ($(card.north west)+(-1.75mm,-1.0mm)$);
+  \end{tikzpicture}}
+
+% ------------------------------------------------------------
+% 16. 组件：zjutimeline 时间线
+% ------------------------------------------------------------
+\newenvironment{zjutimeline}{%
+  \begin{list}{}{\setlength{\leftmargin}{0pt}\setlength{\itemsep}{1.0mm}%
+                 \setlength{\parsep}{0pt}\setlength{\topsep}{0.4mm}}}%
+  {\end{list}}
+\NewDocumentCommand{\titem}{m m m m}{%
+  \item\relax
+  \tikz[baseline=-0.9ex]\node[fill=zju#1, text=white, font=\tiny\bfseries,
+    rounded corners=1.2pt, inner xsep=3.5pt, inner ysep=1.7pt]{#2};\hspace{1.4mm}%
+  {\small\bfseries #3}\;\;{\footnotesize\color{black!62}#4}\par}
+
+% ------------------------------------------------------------
+% 17. 组件：imgcard 图片卡片
+% ------------------------------------------------------------
+\NewDocumentCommand{\imgcard}{O{0.94\linewidth} m m}{%
+  \begin{tikzpicture}[baseline=(card.base)]
+    \node[draw=zjublue!30, fill=white, rounded corners=1.2mm,
+          inner xsep=0.8mm, inner ysep=0.9mm,
+          text width=#1, align=center] (card)
+      {\includegraphics[width=#1, keepaspectratio]{#2}\\[0.6mm]
+       {\scriptsize\color{black!60}#3}};
+  \end{tikzpicture}}
+
+% ------------------------------------------------------------
+% 17b. 组件：zjucode 代码演示框（tcolorbox listings 引擎，无需 [fragile]）
+%      \begin{zjucode}{语言}{标题} ... \end{zjucode}
+% ------------------------------------------------------------
+\newtcblisting{zjucode}[3][]{%
+  listing only, enhanced,
+  colback=zjuice, colframe=zjublue!35,
+  arc=1.5mm, boxrule=0.5pt,
+  colbacktitle=zjublue, coltitle=white, fonttitle=\bfseries\small,
+  title={#3},
+  listing options={language=#2,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries\color{zjubluedark},
+    commentstyle=\itshape\color{black!50},
+    stringstyle=\color{zjubluelight},
+    numbers=none, breaklines=true, columns=flexible,
+    showstringspaces=false, aboveskip=0.3em, belowskip=0.2em},
+  #1}
+
+% ------------------------------------------------------------
+% 18. 代码高亮（浅色主题）
+% ------------------------------------------------------------
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\bfseries\color{zjubluedark},
+  commentstyle=\itshape\color{black!50},
+  stringstyle=\color{zjubluelight},
+  numberstyle=\tiny\color{black!40},
+  backgroundcolor=\color{zjuice},
+  frame=single, rulecolor=\color{zjublue!25},
+  numbers=left, numbersep=6pt,
+  breaklines=true, columns=flexible, showstringspaces=false,
+  xleftmargin=1.6em, framexleftmargin=1.4em
+}
+\lstloadlanguages{C,C++,Java,Matlab,Python,Mathematica,Tex}
+
+% ------------------------------------------------------------
+% 19. 参考文献
+% ------------------------------------------------------------
+\setbeamertemplate{bibliography item}[text]
+\newcommand{\reference}{
+  \nocite{*}
+  \bibliographystyle{unsrt}
+  \begin{center}
+    \bibliography{references}
+  \end{center}
+}
+
+\endinput

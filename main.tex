@@ -1,0 +1,333 @@
+% -*- coding: utf-8 -*-
+% ============================================================
+%  main.tex —— ZJU Beamer 模板功能演示
+%  编译：latexmk -xelatex main.tex（需 XeLaTeX，编译两遍以更新页码/目录）
+%  改内容：直接修改本文件；样式与组件见 zju_beamer_pro.sty
+% ============================================================
+\PassOptionsToPackage{quiet}{fontspec}
+\PassOptionsToPackage{dvipsnames}{xcolor}
+\documentclass[10pt,aspectratio=169]{beamer}
+\usepackage{zju_beamer_pro}
+\graphicspath{{./figures/}}
+
+% ---------------- 首页信息（改成你自己的） ----------------
+\title{浙江大学 Beamer 模板}
+\subtitle{ZJU Beamer Pro · 简洁学术风演示模板}
+\author{张三\\[1mm]{\footnotesize 计算机科学与技术专业}}
+\institute{浙江大学计算机科学与技术学院}
+\date{\today}
+
+\begin{document}
+
+% ============================ 封面 ============================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ============================ 目录 ============================
+\begin{frame}{目录}{CONTENTS}
+  \vspace{2mm}
+  \begin{minipage}[t]{0.48\textwidth}
+    \vspace{0pt}%
+    \tableofcontents[sections={1-3}]
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \vspace{0pt}%
+    \tableofcontents[sections={4-6}]
+  \end{minipage}
+\end{frame}
+
+% ============================================================
+%   01 快速上手
+% ============================================================
+\section{快速上手}
+
+\begin{frame}[fragile]{快速上手}{QUICK START}
+  \begin{minipage}[t]{0.48\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{blue}{环境依赖}
+      {\footnotesize
+      \begin{denseitem}
+        \item TeX Live 2023+（Overleaf 亦可）
+        \item 编译器：\textbf{XeLaTeX}
+        \item 字体已随 \texttt{fonts/} 分发，无需安装
+        \item 西文 Fira Sans 来自 TeX Live 的 \texttt{fira} 宏包
+      \end{denseitem}}
+    \end{zjubox}
+    \begin{zjubox}{gray}{Overleaf 使用}
+      {\footnotesize 新建项目 $\rightarrow$ 上传 Release 中的模板压缩包
+      $\rightarrow$ 菜单中将编译器切换为 \textbf{XeLaTeX}
+      $\rightarrow$ 重新编译两次。}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{green}{Overleaf 之外}
+      {\footnotesize 也可以在 Overleaf 新建空白项目后上传整个仓库，
+      菜单中把编译器切换为 \textbf{XeLaTeX} 后编译两次。}
+    \end{zjubox}
+    \begin{zjubox}{orange}{在哪里改内容}
+      {\footnotesize 所有正文都在 \texttt{main.tex}：
+      封面信息在文件开头的 \texttt{\string\title} 等命令中，
+      正文按 section 组织，组件用法见本演示各页源码。}
+    \end{zjubox}
+  \end{minipage}
+  \vspace{0.6mm}
+  \begin{zjucode}{bash}{本地编译（编译两遍）}
+latexmk -xelatex main.tex
+latexmk -xelatex main.tex
+  \end{zjucode}
+  \begin{takeaway}
+    封面、章节过渡页、致谢页由模板自动生成，只需填好首页信息即可。
+  \end{takeaway}
+\end{frame}
+
+% ============================================================
+%   02 版式样式
+% ============================================================
+\section{版式样式}
+
+\begin{frame}{版式样式}{LAYOUT STYLES}
+  \vspace{1mm}
+  \begin{minipage}[t]{0.48\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{blue}{自动生成的版式}
+      {\small
+      \begin{denseitem}
+        \item \textbf{封面}：求是蓝校徽校名 + 浅蓝色带大标题
+        \item \textbf{章节过渡页}：\texttt{\string\section} 自动插入
+        \item \textbf{致谢页}：\texttt{\string\zjuthanks} 一行调用
+        \item \textbf{页眉横线}：标题 + 渐变细线 + 渐变校名
+      \end{denseitem}}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{green}{页标题与副标题}
+      {\small 每页标题带副标题参数：}
+
+      \vspace{0.8mm}
+      {\small\color{black!60}
+      \texttt{\string\begin\{frame\}\{标题\}\{SUBTITLE\}}}
+
+      \vspace{0.8mm}
+      {\small 副标题以灰色小字显示在标题右侧，
+      建议使用英文大写缩写。}
+    \end{zjubox}
+  \end{minipage}
+  \vspace{1.2mm}
+  \begin{zjubox}{gray}{整页纯白背景}
+    {\small 内容页无任何背景装饰，适合高密度学术内容；
+    全出血封面与章节页自带留白设计，16:9 版面。}
+  \end{zjubox}
+  \begin{takeaway}
+    本页右侧即「标题 + 渐变横线 + 渐变校名」的页眉样式。
+  \end{takeaway}
+\end{frame}
+
+% ============================================================
+%   03 内容布局
+% ============================================================
+\section{内容布局}
+
+\begin{frame}{多栏布局}{MULTI-COLUMN}
+  % ---- 两栏 ----
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{blue}{两栏：minipage + hfill}
+      {\footnotesize 用 \texttt{minipage[t]} 并排内容，
+      首行加 \texttt{\string\vspace\{0pt\}} 保证顶部对齐；
+      栏间用 \texttt{\string\hfill} 撑开。}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{sky}{任意分栏比例}
+      {\footnotesize 栏宽自由组合：
+      0.475 + 0.475、0.3 + 0.3 + 0.3、
+      0.6 + 0.38 等均可，
+      组合 \texttt{zjubox}、\texttt{imgcard}、图表皆可。}
+    \end{zjubox}
+  \end{minipage}
+  \vspace{1.2mm}
+
+  % ---- 三栏 ----
+  \begin{minipage}[t]{0.31\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{orange}{三栏之一}
+      {\footnotesize 三栏时建议 0.31 + 0.31 + 0.31。}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.31\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{purple}{三栏之二}
+      {\footnotesize 各栏首行同样加
+      \texttt{\string\vspace\{0pt\}}。}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.31\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{steel}{三栏之三}
+      {\footnotesize 高度不同时顶部自动对齐。}
+    \end{zjubox}
+  \end{minipage}
+
+  \begin{takeaway}
+    切记：\texttt{minipage[t]} 内第一个元素前加 \texttt{\string\vspace\{0pt\}}，否则顶部不对齐。
+  \end{takeaway}
+\end{frame}
+
+% ============================================================
+%   04 预定义组件
+% ============================================================
+\section{预定义组件}
+
+\begin{frame}{功能框与要点条}{COLORED BOXES}
+  \begin{zjubox}{blue}{zjubox：全色系功能框}
+    {\small 七种色键全部映射为蓝色阶梯：
+    \badge[zjublue]{blue}\ \badge[zjubluelight]{orange}\ \badge[zjusky]{green}\ \badge[zjuindigo]{purple}\ \badge[zjuindigo]{red}\ \badge[zjusky]{gold}\ \badge[zjusteel]{gray}，
+    用法 \texttt{\string\begin\{zjubox\}\{色键\}\{标题\}}。
+    标题条 + 嫩蓝浅底 + 圆角无边框，蓝色系视觉统一。}
+  \end{zjubox}
+  \vspace{1mm}
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{purple}{配合徽章 \string\badge}
+      {\small 徽章用于标签化信息：\badge[zjublue]{标签一}\;
+      \badge[zjubluelight]{标签二}\; \badge[zjuindigo]{重点}}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{steel}{高亮命令 \string\hl}
+      {\small 正文强调用 \hl{蓝色加粗}；
+      takeaway 等深色底上会自动切换为浅色。}
+    \end{zjubox}
+  \end{minipage}
+  \begin{takeaway}
+    takeaway：全宽渐变要点条，用于每页收束一句话结论。
+  \end{takeaway}
+\end{frame}
+
+\begin{frame}{数据卡片与时间线}{STATCARDS \& TIMELINE}
+  % ---- 数据卡片 ----
+  \zjustatwidth=4.55cm
+  \begin{center}
+    \statcard[blue]{98.6}{示例百分制成绩}\hfill
+    \statcard[orange]{4.5\,/\,5.0}{示例均绩}\hfill
+    \statcard[green]{12 项}{示例条目计数}
+  \end{center}
+  \vspace{0.4mm}
+  % ---- 时间线 + 奖项卡片 ----
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{blue}{zjutimeline 时间线}
+      \begin{zjutimeline}
+        \titem{gray}{2024}{阶段一}{示例条目}
+        \titem{silver}{2025}{阶段二}{示例条目}
+        \titem{gold}{2026}{阶段三}{示例条目}
+      \end{zjutimeline}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{orange}{awardcard 奖项卡片}
+      \awardcard[gold]{trophy}{一等奖}{示例竞赛名称}
+      {示例描述 · 团队成员}
+    \end{zjubox}
+  \end{minipage}
+  \begin{takeaway}
+    statcard 可用 \string\hfill 并排，宽度由 \string\zjustatwidth 统一控制。
+  \end{takeaway}
+\end{frame}
+
+% ============================================================
+%   05 代码与公式
+% ============================================================
+\section{代码与公式}
+
+\begin{frame}[fragile]{代码样式}{CODE}
+  \begin{zjucode}{Python}{Python 示例}
+def fibonacci(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+# keyword / comment / string 均有独立配色
+  \end{zjucode}
+  \vspace{0.4mm}
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{green}{样式说明}
+      {\footnotesize
+      \begin{denseitem}
+        \item 基于 listings 宏包，浅冰蓝底 + 细边框
+        \item 关键字深蓝加粗，行号可开关
+      \end{denseitem}}
+    \end{zjubox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \begin{zjubox}{steel}{使用提示}
+      {\footnotesize 用模板提供的 \texttt{zjucode} 代码框，
+      无需 \texttt{[fragile]}；也可直接使用
+      \texttt{lstlisting}（此时页面需 \texttt{[fragile]}）。}
+    \end{zjubox}
+  \end{minipage}
+  \begin{takeaway}
+    listings 已预设配色，直接使用 \texttt{lstlisting} 环境即可。
+  \end{takeaway}
+\end{frame}
+
+\begin{frame}{公式样式}{MATHEMATICS}
+  均值不等式与常用推导：
+  \begin{block}{常用不等式}
+    \vspace{-1.5mm}
+    \begin{align}
+      \frac{a+b}{2} &\geq \sqrt{ab},
+      & \forall a,b>0 \\
+      \sum_{i=1}^{n} i^2 &= \frac{n(n+1)(2n+1)}{6},
+      & n \in \mathbb{N}
+    \end{align}
+  \end{block}
+  \vspace{0.5mm}
+  行内公式保持正文节奏：梯度 $\nabla_\theta \mathcal{L}(\theta)$、
+  注意力 $\mathrm{softmax}(QK^{\top}/\sqrt{d})V$。
+  \begin{takeaway}
+    数学字体为衬线（\texttt{onlymath}），与无衬线正文形成对比。
+  \end{takeaway}
+\end{frame}
+
+% ============================================================
+%   06 图片与卡片
+% ============================================================
+\section{图片与卡片}
+
+\begin{frame}{多栏图片}{FIGURES}
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \centering
+    \imgcard[6.9cm]{demo-a.png}{示例图 A：\texttt{imgcard} 自带边框与图注}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \centering
+    \imgcard[6.9cm]{demo-b.png}{示例图 B：宽度建议 \texttt{\string\linewidth}}
+  \end{minipage}
+  \vspace{1.2mm}
+  \begin{zjubox}{gray}{图文混排}
+    {\small 图片栏与文字栏组合：
+    左侧 \texttt{imgcard}，右侧 \texttt{zjubox} 或列表；
+    \texttt{imgcard} 的第一个参数控制内容宽度。}
+  \end{zjubox}
+  \begin{takeaway}
+    双图并排：两个 \texttt{minipage[t]} 各放一个 \texttt{imgcard}，中间 \string\hfill。
+  \end{takeaway}
+\end{frame}
+
+% ============================ 致谢 ============================
+\begin{frame}[plain]
+  \zjuthanks
+\end{frame}
+
+\end{document}

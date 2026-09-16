@@ -1,0 +1,21 @@
+# LaTeX 辅助文件
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.fls
+*.fdb_latexmk
+*.xdv
+*.synctex.gz
+*.bbl
+*.blg
+
+# 编辑器
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
