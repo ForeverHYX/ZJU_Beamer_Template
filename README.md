@@ -3,6 +3,10 @@
 浙江大学风格的学术演示 Beamer 模板：白底简洁版式 + 求是蓝配色 + 高信息密度组件。
 中文使用**得意黑**、正文使用**霞鹜文楷**、西文使用 **Fira Sans**，编译即所得，Overleaf 可直接使用。
 
+> **说明：本模板基于 [qychen2001/ZJU-Beamer-Template](https://github.com/qychen2001/ZJU-Beamer-Template) 修改扩展而来**，
+> 沿用了其文档框架与校徽校名素材，在此基础上重写了全部视觉样式，并新增一组高信息密度组件。
+> 许可沿用上游（LPPL 1.3c / GPL 3.0 双许可）。
+
 > 特点：封面 / 目录 / 章节过渡页 / 致谢页自动生成；预定义功能框、要点条、数据卡片、
 > 时间线、徽章、图片卡片等组件；蓝色阶梯配色；代码与公式样式开箱即用。
 
@@ -75,7 +79,7 @@ make
 
 本模板在设计过程中参考了以下优秀的开源项目与作品：
 
-- [qychen2001/ZJU-Beamer-Template](https://github.com/qychen2001/ZJU-Beamer-Template) —— 本模板的上游基础
+- [qychen2001/ZJU-Beamer-Template](https://github.com/qychen2001/ZJU-Beamer-Template) —— 本模板的上游项目，文档框架与校徽校名素材来源
 - [TonyCrane 的系统课 slides](https://slides.tonycrane.cc/) —— 版式层级与字体搭配（霞鹜文楷 + 黑体标题）的参考
 - [SimplePlus Beamer Theme](https://github.com/pm25/SimplePlus-BeamerTheme) —— 简洁横线页眉与嫩色 block 风格的参考
 - 字体：[得意黑 Smiley Sans](https://github.com/atelier-anchor/smiley-sans)、[霞鹜文楷 LXGW WenKai](https://github.com/lxgw/LxgwWenKai)（均遵循 SIL OFL 许可）
