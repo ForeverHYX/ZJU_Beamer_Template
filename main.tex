@@ -235,6 +235,28 @@ latexmk -xelatex main.tex
   \end{takeaway}
 \end{frame}
 
+\begin{frame}{多栏图片}{FIGURES}
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \centering
+    \imgcard[6.9cm]{demo-a.png}{示例图 A：\texttt{imgcard} 自带边框与图注}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.475\textwidth}
+    \vspace{0pt}%
+    \centering
+    \imgcard[6.9cm]{demo-b.png}{示例图 B：宽度建议 \texttt{\string\linewidth}}
+  \end{minipage}
+  \vspace{1.2mm}
+  \begin{zjubox}{gray}{图文混排}
+    {\small 图片栏与文字栏组合：
+    左侧 \texttt{imgcard}，右侧 \texttt{zjubox} 或列表；
+    \texttt{imgcard} 的第一个参数控制内容宽度。}
+  \end{zjubox}
+  \begin{takeaway}
+    双图并排：两个 \texttt{minipage[t]} 各放一个 \texttt{imgcard}，中间 \string\hfill。
+  \end{takeaway}
+\end{frame}
+
 % ============================================================
 %   04 代码与公式
 % ============================================================
@@ -292,27 +314,7 @@ def fibonacci(n: int) -> int:
   \end{takeaway}
 \end{frame}
 
-\begin{frame}{多栏图片}{FIGURES}
-  \begin{minipage}[t]{0.475\textwidth}
-    \vspace{0pt}%
-    \centering
-    \imgcard[6.9cm]{demo-a.png}{示例图 A：\texttt{imgcard} 自带边框与图注}
-  \end{minipage}\hfill
-  \begin{minipage}[t]{0.475\textwidth}
-    \vspace{0pt}%
-    \centering
-    \imgcard[6.9cm]{demo-b.png}{示例图 B：宽度建议 \texttt{\string\linewidth}}
-  \end{minipage}
-  \vspace{1.2mm}
-  \begin{zjubox}{gray}{图文混排}
-    {\small 图片栏与文字栏组合：
-    左侧 \texttt{imgcard}，右侧 \texttt{zjubox} 或列表；
-    \texttt{imgcard} 的第一个参数控制内容宽度。}
-  \end{zjubox}
-  \begin{takeaway}
-    双图并排：两个 \texttt{minipage[t]} 各放一个 \texttt{imgcard}，中间 \string\hfill。
-  \end{takeaway}
-\end{frame}
+
 
 % ============================ 致谢 ============================
 \begin{frame}[plain]
