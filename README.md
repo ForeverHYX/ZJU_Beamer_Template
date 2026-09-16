@@ -4,14 +4,30 @@
 
 浙江大学风格的学术演示 Beamer 模板：白底简洁版式 + 求是蓝配色。中文**得意黑**、正文**霞鹜文楷**、西文 **Fira Sans**，Overleaf 开箱即用。
 
-## 快速开始
+## 快速开始（Overleaf）
 
-- **Overleaf**：下载 [Release](../../releases) 中的 zip → 新建项目 → Upload Project → 编译器改为 **XeLaTeX** → 编译两次。
-- **本地**：TeX Live 2023+（含 `fira` 宏包），执行：
+下载 [Release](../../releases) 中的 zip → 新建项目 → Upload Project → 编译器改为 **XeLaTeX** → 编译两次。
+
+## 本地使用
+
+### 环境要求
+
+- TeX Live 2023+ 或 MiKTeX，编译器为 **XeLaTeX**
+- 宏包：`ctex`、`xeCJK`、`fontspec`、`tikz`、`tcolorbox`、`fontawesome5`、`booktabs`、`listings`（TeX Live full 方案自带）
+- 西文字体 Fira Sans：来自 TeX Live 的 `fira` 宏包，缺失时执行 `tlmgr install fira`
+- 中文字体（得意黑、霞鹜文楷）已随 `fonts/` 目录分发，无需安装
+
+### 编译命令
 
 ```bash
-latexmk -xelatex main.tex   # 编译两次
+latexmk -xelatex main.tex      # 推荐：自动多遍编译，更新目录
+# 或
+xelatex main.tex               # 手动编译，需执行两遍
+make                           # 等价于 latexmk
+make clean                     # 清理辅助文件
 ```
+
+> 首次编译后目录可能为空，再编译一次即可。
 
 ## 在哪里改内容
 
