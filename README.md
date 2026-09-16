@@ -56,6 +56,8 @@ make
 | 各 `\begin{frame}...` | 每一页正文，组件用法参考对应演示页源码 |
 | `zju_beamer_pro.sty` | 配色、字体、组件样式（一般无需改动） |
 
+> 致谢页署名：在 `main.tex` 导言区 `\renewcommand{\zjuthanksinfo}{你的姓名 · 院系 · 日期}` 即可定制。
+
 ## 目录结构
 
 ```

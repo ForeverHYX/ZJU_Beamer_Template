@@ -283,6 +283,9 @@
   \fi
 }
 
+% 致谢页署名信息（使用前 \renewcommand 定制）
+\newcommand{\zjuthanksinfo}{ZJU Beamer Template · \today}
+
 % ------------------------------------------------------------
 % 9b. 致谢页（白底，与封面/章节页同风格；\begin{frame}[plain]\zjuthanks\end{frame}）
 % ------------------------------------------------------------
@@ -304,7 +307,7 @@
     \node[overlay,anchor=west,text=black!82,font=\large\bfseries] at (1.05cm,-6.35cm)
       {谢谢！};
     \node[overlay,anchor=west,text=black!55,font=\footnotesize] at (1.05cm,-7.0cm)
-      {洪奕迅 · 信息安全专业 2023 级 · 2026 年 9 月};
+      {\zjuthanksinfo};
   \end{tikzpicture}}%
 }
 
