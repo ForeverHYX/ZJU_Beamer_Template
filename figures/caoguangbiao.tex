@@ -11,13 +11,8 @@
 \begin{document}
 \begin{tikzpicture}[x=1cm,y=1cm,line width=0pt,
   declare function={wingY(\x,\y)=1.86+(\y-1.86)*(1+0.12*(4.95-\x));}]
-  \path[use as bounding box] (0,0) rectangle (13.8,7.1);
+  \path[use as bounding box] (0,1.35) rectangle (13.8,7.1);
 
-  % transparent background (watermark use); diagonal ground shadow kept
-  \fill[shadow] (0.8,1.35) -- (3.1,0) -- (13.8,0)
-    -- (13.8,1.35) -- cycle;
-  \fill[ground] (0.8,1.35) -- (2.0,1.76) -- (11.8,1.76)
-    -- (13.0,1.35) -- cycle;
 
   % Wings rise outward by about 21 degrees along the roofline.
   % The same perspective map inclines every window and floor band,
