@@ -208,23 +208,32 @@
   \hbox{\leavevmode\hskip-\Gm@lmargin#1\hskip-\Gm@rmargin}}
 
 % 玉泉曹光彪楼水印 —— 楼体使用手绘透视立面（figures/caoguangbiao.tex，
-% standalone 编译为 caoguangbiao.pdf，透明底）；#1 = 图片左下角锚点
+% standalone 编译为 caoguangbiao.pdf，透明底）；章节/致谢页：底部贯穿
+% 整页的地面横线 + 缩小的楼体
 \newcommand{\zju@landmark}[1]{%
-  \node[overlay,anchor=south west,inner sep=0pt] at #1
-    {\includegraphics[width=6.9cm]{figures/caoguangbiao.pdf}};}
+  \begin{scope}[shift={#1}]
+    \fill[black!3] (-14,0) rectangle (6.5,-1.05);
+    \draw[black!10,line width=0.5pt] (-14,0) -- (6.5,0);
+    \node[overlay,anchor=south west,inner sep=0pt] at (0.2,0)
+      {\includegraphics[width=4.4cm]{figures/caoguangbiao.pdf}};
+  \end{scope}}
 
-% 封面角部放大版（右上，出血右缘）
+% 封面/封底角部版（右上，稍大）：底座横线 + 浅色基座，向右出血
 \newcommand{\zju@landmarkcorner}[1]{%
-  \node[overlay,anchor=north west,inner sep=0pt] at #1
-    {\includegraphics[width=7.2cm]{figures/caoguangbiao.pdf}};}
+  \begin{scope}[shift={#1}]
+    \fill[black!5] (-0.7,0) rectangle (8.0,-0.09);
+    \draw[black!10,line width=0.5pt] (-0.7,0) -- (8.0,0);
+    \node[overlay,anchor=south west,inner sep=0pt] at (0,0)
+      {\includegraphics[width=5.6cm]{figures/caoguangbiao.pdf}};
+  \end{scope}}
 
 \defbeamertemplate*{title page}{zjupro}{%
   \zjufullbleed{%
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
     \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
-    % —— 右侧曹光彪楼水印（放大、出血右缘）——
-    \zju@landmarkcorner{(\paperwidth-7.0cm,-0.55cm)}
+    % —— 右上角曹光彪楼水印（稍大 + 底座）——
+    \zju@landmarkcorner{(\paperwidth-6.0cm,-4.2cm)}
     % —— 左上校徽 + 校名（本蓝）——
     \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
       {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
@@ -264,7 +273,7 @@
     \node[overlay,anchor=north west,inner sep=0pt] at (1.07cm,-2.6cm)
       {\includegraphics[height=0.5cm]{figures/char_blue.png}};
     % 右下角淡色芯片装饰 + 巨大幽灵章节号
-    \zju@landmark{(\paperwidth-7.1cm,-\paperheight)}
+    \zju@landmark{(\paperwidth-4.9cm,-8.0cm)}
     \node[overlay,anchor=east,text=zjublue!10,
           font=\zjutitlefont\fontsize{110}{110}\selectfont\bfseries]
       at (\paperwidth-0.7cm,-2.6cm) {\insertsectionnumber};
@@ -296,7 +305,8 @@
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
     \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
-    \zju@landmark{(\paperwidth-7.1cm,-\paperheight)}
+    % —— 右上角曹光彪楼水印（稍大 + 底座）——
+    \zju@landmarkcorner{(\paperwidth-6.0cm,-4.1cm)}
     % 左上校徽 + 校名
     \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
       {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
