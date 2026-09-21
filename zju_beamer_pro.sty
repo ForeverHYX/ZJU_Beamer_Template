@@ -226,22 +226,14 @@
     \node[overlay,anchor=south west,inner sep=0pt] at (0,0)
       {\includegraphics[width=5.6cm]{figures/caoguangbiao.pdf}};
   \end{scope}}
-% 封底角部版（右上）：底座横线 + 浅色基座
-\newcommand{\zju@landmarkthanks}[1]{%
-  \begin{scope}[shift={#1}]
-    \fill[black!5] (0,0) rectangle (8.0,-0.09);
-    \draw[black!10,line width=0.5pt] (0,0) -- (8.0,0);
-    \node[overlay,anchor=south west,inner sep=0pt] at (0,0)
-      {\includegraphics[width=5.6cm]{figures/caoguangbiao.pdf}};
-  \end{scope}}
 
 \defbeamertemplate*{title page}{zjupro}{%
   \zjufullbleed{%
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
     \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
-    % —— 右上角曹光彪楼水印（岸线底座，与左上 logo 块垂直居中对齐）——
-    \zju@landmarkcorner{(\paperwidth-5.9cm,-3.37cm)}
+    % —— 右上角曹光彪楼水印（岸线底座，主体中心对齐左上校徽中心）——
+    \zju@landmarkcorner{(\paperwidth-5.9cm,-3.02cm)}
     % —— 左上校徽 + 校名（本蓝）——
     \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
       {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
@@ -313,8 +305,8 @@
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
     \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
-    % —— 右上角曹光彪楼水印（底座横线 + 浅色基座）——
-    \zju@landmarkthanks{(\paperwidth-6.0cm,-4.1cm)}
+    % —— 右上角曹光彪楼水印（与封面同款：岸线底座、中心对齐校徽）——
+    \zju@landmarkcorner{(\paperwidth-5.9cm,-3.02cm)}
     % 左上校徽 + 校名
     \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
       {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
