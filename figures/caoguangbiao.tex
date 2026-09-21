@@ -1,0 +1,87 @@
+\documentclass[tikz,border=0pt]{standalone}
+% Compile: pdflatex caoguangbiao.tex
+% Stylized perspective elevation, not a measured architectural drawing.
+% To embed: copy the color definitions and tikzpicture into your document.
+\definecolor{building}{HTML}{ECECEB}
+\definecolor{recess}{HTML}{F5F5F4}
+\definecolor{detail}{HTML}{E4E4E3}
+\definecolor{ground}{HTML}{F3F3F2}
+\definecolor{shadow}{HTML}{F8F8F7}
+
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,line width=0pt,
+  declare function={wingY(\x,\y)=1.86+(\y-1.86)*(1+0.12*(4.95-\x));}]
+  \path[use as bounding box] (0,0) rectangle (13.8,7.1);
+
+  % transparent background (watermark use); diagonal ground shadow kept
+  \fill[shadow] (0.8,1.35) -- (3.1,0) -- (13.8,0)
+    -- (13.8,1.35) -- cycle;
+  \fill[ground] (0.8,1.35) -- (2.0,1.76) -- (11.8,1.76)
+    -- (13.0,1.35) -- cycle;
+
+  % Wings rise outward by about 21 degrees along the roofline.
+  % The same perspective map inclines every window and floor band,
+  % while keeping both wings anchored to the level entrance platform.
+  % Adjust 0.12 in wingY above to change the outward rise.
+  \foreach \side in {0,1} {
+    \begin{scope}[shift={(\side*13.8,0)},xscale=1-2*\side]
+      \fill[building] (1.25,1.86) -- (4.95,1.86)
+        -- (4.95,{wingY(4.95,4.96)})
+        -- (1.25,{wingY(1.25,4.96)}) -- cycle;
+      \fill[building] (1.12,{wingY(1.12,4.96)})
+        -- (4.99,{wingY(4.99,4.96)})
+        -- (4.99,{wingY(4.99,5.13)})
+        -- (1.12,{wingY(1.12,5.13)}) -- cycle;
+      \fill[recess] (4.67,1.86) -- (5.03,1.86)
+        -- (5.03,{wingY(5.03,4.96)})
+        -- (4.67,{wingY(4.67,4.96)}) -- cycle;
+      \foreach \y in {2.14,2.81,3.48,4.15} {
+        \foreach \x in {1.51,2.29,3.07,3.85} {
+          \fill[white] (\x,{wingY(\x,\y)})
+            -- ({\x+0.60},{wingY(\x+0.60,\y)})
+            -- ({\x+0.60},{wingY(\x+0.60,\y+0.43)})
+            -- (\x,{wingY(\x,\y+0.43)}) -- cycle;
+        }
+      }
+      % A narrow vertical return where each wing meets the entrance.
+      \fill[building] (4.79,1.86) -- (5.02,1.86)
+        -- (5.02,{wingY(5.02,4.97)})
+        -- (4.79,{wingY(4.79,4.97)}) -- cycle;
+    \end{scope}
+  }
+
+  % Recessed central facade.
+  \fill[recess] (5.03,1.86) rectangle (8.77,5.07);
+  \fill[building] (5.78,1.94) rectangle (8.02,4.71);
+
+  % The distinctive tall round-headed feature on the central wall.
+  \fill[white] (6.12,2.08) -- (6.12,3.93)
+    arc[start angle=180,end angle=0,radius=0.78]
+    -- (7.68,2.08) -- cycle;
+  \fill[recess] (6.40,2.08) -- (6.40,3.93)
+    arc[start angle=180,end angle=0,radius=0.50]
+    -- (7.40,2.08) -- cycle;
+
+  % Tall portico piers and the faceted projecting roof.
+  \fill[building] (5.02,1.85) rectangle (5.43,5.33);
+  \fill[building] (8.37,1.85) rectangle (8.78,5.33);
+  \fill[detail] (5.34,2.02) rectangle (5.43,5.14);
+  \fill[detail] (8.37,2.02) rectangle (8.46,5.14);
+  \fill[building] (4.79,5.07) -- (5.39,5.38) -- (5.39,6.03)
+    -- (4.79,5.71) -- cycle;
+  \fill[building] (9.01,5.07) -- (8.41,5.38) -- (8.41,6.03)
+    -- (9.01,5.71) -- cycle;
+  \fill[building] (5.39,5.38) rectangle (8.41,6.03);
+  \fill[detail] (5.39,5.30) rectangle (8.41,5.38);
+  \fill[building] (5.69,6.03) -- (6.90,6.53) -- (8.11,6.03) -- cycle;
+  \fill[white] (6.37,6.07) -- (6.90,6.32) -- (7.43,6.07) -- cycle;
+  \fill[building] (6.86,6.06) rectangle (6.94,6.35);
+
+  % Broad stairs and the low name stone, with lettering omitted.
+  \fill[building] (1.40,1.76) rectangle (12.40,1.89);
+  \fill[building] (1.22,1.61) rectangle (12.58,1.73);
+  \fill[building] (1.02,1.46) rectangle (12.78,1.58);
+  \fill[building] (6.17,1.83) rectangle (7.63,2.20);
+  \fill[detail] (6.08,1.76) rectangle (7.72,1.84);
+\end{tikzpicture}
+\end{document}
