@@ -207,15 +207,44 @@
   \nointerlineskip
   \hbox{\leavevmode\hskip-\Gm@lmargin#1\hskip-\Gm@rmargin}}
 
-% 芯片 die 几何装饰（浅色，用于白底大页面）
-\newcommand{\zju@chiptec}[2]{%
-  \begin{scope}[shift={#1},rotate=45]
-    \fill[black!5]   (-2.7,-2.7) rectangle (2.7,2.7);
-    \fill[black!9]   (-1.95,-1.95) rectangle (1.95,1.95);
-    \fill[zjublue!9] (-1.25,-1.25) rectangle (1.25,1.25);
-    \fill[zjublue!15](-0.6,-0.6) rectangle (0.6,0.6);
-    \foreach \i in {-2.35,-1.55,0.75,1.55,2.35}
-      \fill[black!14] (\i-0.11,2.7) rectangle (\i+0.11,3.15);
+% 玉泉曹光彪楼剪影（浅色，用于白底大页面）——K 字型平面（求是鹰），
+% 14 层板式主楼 + 两侧裙楼 + 屋顶机房与天线；地面线样式与 CUHK 版一致
+\newcommand{\zju@landmark}[1]{%
+  \begin{scope}[shift={#1}]
+    \fill[black!3] (-14,0) rectangle (3.5,-1.05);
+    \draw[black!10,line width=0.5pt] (-14,0) -- (3.5,0);
+    \fill[black!5] (-1.5,0) rectangle (1.5,0.18);
+    \fill[black!5] (-1.5,0.18) rectangle (-0.55,0.62);
+    \fill[black!5] (0.75,0.18) rectangle (1.5,0.82);
+    \fill[black!8] (-0.55,0.18) rectangle (0.75,1.35);
+    \foreach \y in {0.30,0.40,...,1.30}
+      \draw[white,line width=0.45pt] (-0.55,\y) -- (0.75,\y);
+    \foreach \y in {0.32,0.46}
+      \draw[white,line width=0.45pt] (-1.5,\y) -- (-0.55,\y);
+    \foreach \y in {0.32,0.46,0.64}
+      \draw[white,line width=0.45pt] (0.75,\y) -- (1.5,\y);
+    \fill[black!8] (-0.35,1.35) rectangle (0.55,1.47);
+    \draw[black!8,line width=0.9pt] (0.12,1.47) -- (0.12,1.64);
+  \end{scope}}
+
+% 封面角部放大版：自包含地面小景（岸线式收边，不横穿页面），向右出血
+\newcommand{\zju@landmarkcorner}[1]{%
+  \begin{scope}[shift={#1},scale=1.1]
+    \fill[black!3] (-1.6,0) -- (-1.3,-0.26) -- (-0.9,-0.5) -- (-0.45,-0.72) --
+                   (0.05,-1.02) -- (3.5,-1.02) -- (3.5,0) -- cycle;
+    \draw[black!10,line width=0.5pt] (-1.6,0) -- (3.5,0);
+    \fill[black!5] (-1.5,0) rectangle (1.5,0.18);
+    \fill[black!5] (-1.5,0.18) rectangle (-0.55,0.62);
+    \fill[black!5] (0.75,0.18) rectangle (1.5,0.82);
+    \fill[black!8] (-0.55,0.18) rectangle (0.75,1.35);
+    \foreach \y in {0.30,0.40,...,1.30}
+      \draw[white,line width=0.45pt] (-0.55,\y) -- (0.75,\y);
+    \foreach \y in {0.32,0.46}
+      \draw[white,line width=0.45pt] (-1.5,\y) -- (-0.55,\y);
+    \foreach \y in {0.32,0.46,0.64}
+      \draw[white,line width=0.45pt] (0.75,\y) -- (1.5,\y);
+    \fill[black!8] (-0.35,1.35) rectangle (0.55,1.47);
+    \draw[black!8,line width=0.9pt] (0.12,1.47) -- (0.12,1.64);
   \end{scope}}
 
 \defbeamertemplate*{title page}{zjupro}{%
@@ -223,8 +252,8 @@
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
     \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
-    % —— 右侧芯片几何装饰 ——
-    \zju@chiptec{(\paperwidth+0.9cm,-3.1cm)}{}
+    % —— 右侧曹光彪楼剪影（放大、出血右缘）——
+    \zju@landmarkcorner{(\paperwidth-3.6cm,-2.55cm)}
     % —— 左上校徽 + 校名（本蓝）——
     \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
       {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
@@ -264,7 +293,7 @@
     \node[overlay,anchor=north west,inner sep=0pt] at (1.07cm,-2.6cm)
       {\includegraphics[height=0.5cm]{figures/char_blue.png}};
     % 右下角淡色芯片装饰 + 巨大幽灵章节号
-    \zju@chiptec{(\paperwidth+1.1cm,-\paperheight+0.4cm)}{}
+    \zju@landmark{(\paperwidth-2.05cm,-8.0cm)}
     \node[overlay,anchor=east,text=zjublue!10,
           font=\zjutitlefont\fontsize{110}{110}\selectfont\bfseries]
       at (\paperwidth-0.7cm,-2.6cm) {\insertsectionnumber};
@@ -296,7 +325,7 @@
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
     \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
-    \zju@chiptec{(\paperwidth+0.9cm,-3.4cm)}{}
+    \zju@landmark{(\paperwidth-2.05cm,-8.0cm)}
     % 左上校徽 + 校名
     \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
       {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
