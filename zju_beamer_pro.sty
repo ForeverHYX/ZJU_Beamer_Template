@@ -221,17 +221,17 @@
 % 封面角部版（右上，稍大）：CUHK 合一亭式岸线楔形底座，向右出血
 \newcommand{\zju@landmarkcorner}[1]{%
   \begin{scope}[shift={#1}]
-    \fill[black!3] (-1.2,0) -- (-0.95,-0.18) -- (-0.55,-0.34) -- (-0.1,-0.48) --
-                   (0.4,-0.6) -- (6.5,-0.6) -- (6.5,0) -- cycle;
-    \draw[black!10,line width=0.5pt] (-1.2,0) -- (6.5,0);
+    \fill[black!3] (0,0) -- (0.3,-0.3) -- (0.75,-0.55) -- (1.35,-0.72) --
+                   (2.1,-0.82) -- (6.5,-0.82) -- (6.5,0) -- cycle;
+    \draw[black!10,line width=0.5pt] (0,0) -- (6.5,0);
     \node[overlay,anchor=south west,inner sep=0pt] at (0,0)
       {\includegraphics[width=5.6cm]{figures/caoguangbiao.pdf}};
   \end{scope}}
 % 封底角部版（右上）：底座横线 + 浅色基座
 \newcommand{\zju@landmarkthanks}[1]{%
   \begin{scope}[shift={#1}]
-    \fill[black!5] (-0.7,0) rectangle (8.0,-0.09);
-    \draw[black!10,line width=0.5pt] (-0.7,0) -- (8.0,0);
+    \fill[black!5] (0,0) rectangle (8.0,-0.09);
+    \draw[black!10,line width=0.5pt] (0,0) -- (8.0,0);
     \node[overlay,anchor=south west,inner sep=0pt] at (0,0)
       {\includegraphics[width=5.6cm]{figures/caoguangbiao.pdf}};
   \end{scope}}
@@ -241,8 +241,8 @@
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,-\paperheight);
     \fill[white] (0,0) rectangle (\paperwidth,-\paperheight);
-    % —— 右上角曹光彪楼水印（CUHK 式岸线底座）——
-    \zju@landmarkcorner{(\paperwidth-5.9cm,-3.9cm)}
+    % —— 右上角曹光彪楼水印（岸线底座，与左上 logo 块垂直居中对齐）——
+    \zju@landmarkcorner{(\paperwidth-5.9cm,-3.37cm)}
     % —— 左上校徽 + 校名（本蓝）——
     \node[overlay,anchor=north west,inner sep=0pt] at (1.05cm,-0.9cm)
       {\includegraphics[height=1.5cm]{figures/logo_blue.png}};
@@ -282,7 +282,7 @@
     \node[overlay,anchor=north west,inner sep=0pt] at (1.07cm,-2.6cm)
       {\includegraphics[height=0.5cm]{figures/char_blue.png}};
     % 右下角淡色芯片装饰 + 巨大幽灵章节号
-    \zju@landmark{(\paperwidth-4.9cm,-8.0cm)}
+    \zju@landmark{(\paperwidth-4.9cm,-8.2cm)}
     \node[overlay,anchor=east,text=zjublue!10,
           font=\zjutitlefont\fontsize{110}{110}\selectfont\bfseries]
       at (\paperwidth-0.7cm,-2.6cm) {\insertsectionnumber};
